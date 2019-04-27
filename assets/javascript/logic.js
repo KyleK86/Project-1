@@ -8,9 +8,6 @@ let config = {
 };
 firebase.initializeApp(config);
 let database = firebase.database;
-
-
-
 // function to make ajax call to webcams.travel
 $(document).on('click', '#search-btn', function () {
 	event.preventDefault();

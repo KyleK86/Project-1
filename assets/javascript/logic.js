@@ -12,20 +12,23 @@ let database = firebase.database;
 
 
 // function to make ajax call to webcams.travel
-let webcamKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
-let coordinates = $('#search-bar').val();
-let orderBy = 'distance';
-let webcamHost = 'https://webcamstravel.p.rapidapi.com/webcams/list/nearby=' + coordinates + '/orderby=' + orderBy;
 $(document).on('click', '#search-btn', function () {
 	event.preventDefault();
+	let webcamKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
+	let coordinates = $('#search-bar').val().trim();
+	let orderBy = 'distance';
+	let webcamHost = 'https://webcamstravel.p.rapidapi.com/webcams/list/property=live/nearby=' + coordinates + '/orderby=' + orderBy + '/limit=20?show=webcams:player';
 	$.ajax({
 		url: webcamHost,
 		method: 'GET',
-		Headers: {
-			"X-RapidAPI-Key": webcamKey
+		headers: {
+			"X-RapidAPI-Key": webcamKey,
+			"X-RapidAPI-Host": "webcamstravel.p.rapidapi.com"
 		}
 	}).then(function (response) {
 		console.log(response);
+		source = response.result.webcams[0].player.live.embed;
+		$('.webcam').html('<embed src=' + source + '>');
 	});
 });
 

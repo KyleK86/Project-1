@@ -25,3 +25,7 @@
     grid-column-start: 3;
     grid-column-end: 4;
 }
+
+.webcam {
+    background: black;
+}

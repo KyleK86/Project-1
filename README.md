@@ -29,6 +29,22 @@ Identify and prioritize user stories:
     **Append information to HTML for user viewing
     **Allow user to search for area by name or zip code
 
+Bare minimum funcionality:
+-User Login to personal account/ Log back out
+-User ability to search a location by name or zip code
+-On location search, also display travel booking information for area
+	-Flight information
+	-Hotels (by rating)
+	-Air BnB
+	-Tourist Attractions
+-User ability to set searched locations to "Favorites" and pull them back up on login
+-Link to outside material guiding users to utilize a VPN for more cost effective travel
+
+Hopeful functionality:
+-Spotlight section that shows popular/highly viewed webcams
+-Sidebar to list webcams by region
+
+
 
 
 

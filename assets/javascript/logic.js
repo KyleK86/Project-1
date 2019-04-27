@@ -8,19 +8,29 @@ let config = {
 };
 firebase.initializeApp(config);
 let database = firebase.database;
+
+
+
 // function to make ajax call to webcams.travel
 let webcamKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
 let coordinates = $('#search-bar').val();
-let webcamHost = 'webcamstravel.p.rapidapi.com/webcams/list/nearby=' + coordinates + '/orderby=' + orderBy;
-$(document).on('click', '#search-bar', function () {
+let orderBy = 'distance';
+let webcamHost = 'https://webcamstravel.p.rapidapi.com/webcams/list/nearby=' + coordinates + '/orderby=' + orderBy;
+$(document).on('click', '#search-btn', function () {
+	event.preventDefault();
 	$.ajax({
 		url: webcamHost,
-		method: 'GET'
-	}).then(handleWebcams(response));
+		method: 'GET',
+		Headers: {
+			"X-RapidAPI-Key": webcamKey
+		}
+	}).then(function (response) {
+		console.log(response);
+	});
 });
-const handleWebcams = (response) => {
-	console.log(response);
-};
+
+
+
 //.done(function to render nearest webcam and list of nearby cams to html)
 
 // function to make ajax call to travel agency API

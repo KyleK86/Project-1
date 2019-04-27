@@ -18,8 +18,6 @@ Identify and prioritize user stories:
     ** Write function to take user input from searchbar and append webcam results to HTML/ Clear previous results
      **Allow user to search for area by name or area code
 
-    
-
 2:) As a user, I want to keep my previously viewed locations saved for later viewing.
     **Allow user to build list of favorite locations and save them to Firebase
     **Function to append saved locations to HTML based on user's previous saves

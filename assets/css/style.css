@@ -1,27 +1,32 @@
 
 .container {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-gap: 2em;
 }
 
 .media-wrap {
     grid-column-start: 1;
-    grid-column-end: 3;
+    grid-column-end: 2;
 }
 
-.table-wrap {
-    grid-column-start: 3;
-    grid-column-end: 4;
+.travel-wrap {
+    grid-column-start: 1;
+    grid-column-end: 2;
 
 }
 
 .search-wrap {
-    grid-column-start: 1;
+    grid-column-start: 2;
     grid-column-end: 3;
 }
 
 .favorites-wrap {
-    grid-column-start: 3;
-    grid-column-end: 4;
+    grid-column-start: 2;
+    grid-column-end: 3;
 }
+
+.webcam {
+    background: black;
+}
+

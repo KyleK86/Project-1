@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,14 +6,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- RESET -->
     <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
-
-    <title>Document</title>
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- PERSONAL STYLES -->
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <title>Webcam App</title>
 </head>
 
 <body>
+  
+    <nav class="navbar-wrap navbar navbar-expand-lg navbar-light bg-dark justify-content-end">
+        <div class="navbar">
+            <img id="brand" src="" alt="">
+            <a class="text-light px-2" id="account-btn" href="#">Account</a>
+            <a class="text-light px-2" id="logout-btn" href="#">Logout</a>
+        </div>
+    </nav>
 
+    <div class="container mt-4">
+        
+        <div class="media-wrap">
+            <div class="webcam-title text-center">
+                <h2>Webcam</h2>
+            </div>
+            <div class="webcam text-center">
+                <img src="assets/images/Wang.jpg" alt="Kyle Wang" style="height:400px; width:550px">
+            </div>
+            <div class="webcam-location text-center">
+                <h4>Location</h4>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table class="travel-table table">
+                <thead class="travel-thead thead">
+                    <span class="travel-info-title text-center">
+                        <h2>Travel Info</h2>
+                    </span>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Rating</th>
+                    <tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="search-wrap text-center">
+            <form action="">
+                <input id="search-bar" type="text" placeholder="Search" name="search">
+                <button id="search-btn" type="submit">Submit</button>
+            </form>
+        </div>
+
+        <div class="favorites-wrap">
+            <table class="favorites-table table">
+                <div class="favorites-title text-center">
+                    <h2>Favorites</h2>
+                </div>
+                <thead class="favorites-thead thead text-center">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Rating</th>
+                    <tr>
+                </thead>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- BOOTSTRAP JQUERY & JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+
+    <!-- PERSONAL JS -->
+    <script src="assets/javascript/logic.js"></script>
 </body>
 
 </html>

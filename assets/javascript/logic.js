@@ -1,3 +1,4 @@
+
 // Initialize Firebase
 let config = {
 	apiKey: "AIzaSyA_VBvhCQwkbk792q9BVCv19uC-SAMm8-M",
@@ -10,12 +11,10 @@ let config = {
 firebase.initializeApp(config);
 let database = firebase.database;
 
-
-// Function to make ajax call with user input and populate 10 webcam previews based on distance
-
+// Click function populates 9 webcams that are sorted by distance based on user input
 $(document).on('click', '#search-btn', function () {
 	event.preventDefault();
-
+	// Google Maps Geocoding ajax call converts normal address or location in to coordinates
 	let geocodeKey = 'AIzaSyC2z-v8BYL87BcckVHVlaHh2kMPsauIln4'
 	let destination = $('#search-bar').val().trim().replace(' ', "+");
 	let geocodeHost = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + destination + '&key=' + geocodeKey;
@@ -23,74 +22,67 @@ $(document).on('click', '#search-btn', function () {
 		url: geocodeHost,
 		method: 'GET'
 	}).then(function (response) {
-		// console.log(response);
+		// Test / Debug
+		console.log(response);
 		let longitude = response.results[0].geometry.location.lng;
 		let latitude = response.results[0].geometry.location.lat;
-		let coordinates = longitude + "," + latitude + ",1000";
-
-		console.log(coordinates);
+		let coordinates = latitude + "," + longitude+ ",1000";
 		getCams(coordinates);
 	});
 });
 
+// Function to retrieve webcams based on the converted location (coordinates) produced by Geocoding
 function getCams(coordinates) {
 	let webcamKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
-	let queryURL = 'https://webcamstravel.p.rapidapi.com/webcams/list/property=live/nearby=' + coordinates + '/orderby=distance/limit=24?show=webcams:image,player,location';
+	let queryURL = 'https://webcamstravel.p.rapidapi.com/webcams/list/property=live/nearby=' + coordinates + '/orderby=distance/limit=9?show=webcams:image,player,location';
 	$.ajax({
 		url: queryURL,
 		method: 'GET',
+		contentType: 'application/json; charset=utf-8',
 		headers: {
 			"X-RapidAPI-Key": webcamKey,
 			"X-RapidAPI-Host": "webcamstravel.p.rapidapi.com"
 		}
 	}).then(function (responseCam) {
-		// Create variable to hold response data
-		let data = responseCam.result
+		let data = responseCam.result;
+		// Create div to display contents to HTML
+		let dataDiv = $("<div>");
+		dataDiv.addClass("dataDiv");
 		// Test / Debug
+		// console.log(responseCam);
 		// console.log(data);
-		console.log(responseCam);
-		
 
-		// // Create div to display contents to HTML
-		// let dataDiv = $("<div>");
-		// dataDiv.addClass("dataDiv");
+		// Iterate and parse through data
+		for (var i = 0; i < data.webcams.length; i++) {
+			// Create variables to hold webcam location
+			let region = data.webcams[i].location.region;
+			let city = data.webcams[i].location.city;
+			let location = region + ", " + city;
 
-		// // Iterate and parse through data
-		// for (var i = 0; i < data.webcams.length; i++) {
-		// 	// Create div to hold each of the data results contents
-		// 	let dataResult = $("<div>");
-		// 	dataResult.addClass("dataResult");
-
-		// 	// Create variables to hold webcam location and HTML ref
-		// 	let country = data.webcams[i].location.country;
-		// 	let city = data.webcams[i].location.city;
-		// 	let location = "<small>" + country + ", " + city + "</small>";
-
-		// 	// Create an anchor tag to nest each webcam preview and make them links
-		// 	let webcamURL = $("<a>");
-		// 	webcamURL.addClass("url");
-		// 	webcamURL.attr("href", data.webcams[i].player.live.embed);
-		// 	webcamURL.attr("target", "_blank");
-
-		// 	// Create an img tag to display each webcam preview
-		// 	let previewTag = $("<img>");
-		// 	previewTag.addClass("webcam");
-		// 	previewTag.attr("src", data.webcams[i].image.current.preview);
-		// 	previewTag.attr("alt", data.webcams[i].title);
-
-
-		// 	webcamURL.prepend(previewTag);
-		// 	// Prepend webcam and location to "dataResult"
-		// 	dataResult.prepend(webcamURL);
-		// 	dataResult.prepend(location);
-		// 	// Prepend "dataResult" to "dataDiv"
-		// 	dataDiv.prepend(dataResult);
-		// }
-		// // Display "dataDiv" containing all contents to HTML
-		// $('.webcam-div').prepend(dataDiv);
+			// Dynamically create a Bootstrap image card to display each webcam preview
+			let card = $("<div>").addClass("card");
+			let cardImg = $("<img>").addClass("webcam").addClass("card-img-top");
+			cardImg.attr("src", data.webcams[i].image.current.preview).attr("alt", data.webcams[i].title);
+			let cardBody = $("<div>").addClass("card-body");
+			let cardTitle = $("<p>").addClass("card-title").text(location);
+			let cardText = $("<p>").addClass("card-text");
+			let button = $("<a>").addClass("btn btn-dark py-1")
+			button.attr("href", data.webcams[i].player.live.embed).attr("target", "_blank");
+			button.text("Take me here!");
+			
+			// Build card
+			cardBody.append(cardTitle);
+			cardBody.append(cardText);
+			cardBody.append(button);
+			card.append(cardBody);
+			card.prepend(cardImg);
+			// Attach to div
+			dataDiv.prepend(card);
+		}
+		// Display "dataDiv" containing card to HTML
+		$('.webcam-div').append(dataDiv);
 	});
 }
-
 
 
 //.done(function to render nearest webcam and list of nearby cams to html)

@@ -11,17 +11,11 @@ body {
     display: grid;
     grid-template-columns: 1fr;
 }
+
 .dataDiv {
     display: grid;
-    grid-template-columns: 2fr 3fr 3fr 2fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 0.5em;
-}
-
-.dataResult {
-    border-radius: 5px;
-    background: #000000c7;
-    color: white;
-    font-family: 'Roboto Slab', serif;
 }
 
 /* NAVBAR
@@ -66,9 +60,19 @@ body {
 
 /* WEBCAM / MEDIA
 ================================================================= */
-.webcam {
-    width: 100%;
-    height: 90%;
+.card {
+    background: #000000c7;
+    color: white;
+    font-family: 'Roboto Slab', serif;
+}
+
+.card-body {
+    padding: 0.5em;
+}
+
+.card-body p,
+.card-title {
+    margin-bottom: 0.25em
 }
 
 #mobileAd {

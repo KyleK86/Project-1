@@ -5,55 +5,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css?family=Karla|Roboto+Mono|Roboto+Slab" rel="stylesheet">
     <!-- RESET -->
     <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
     <!-- BOOTSTRAP -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- PERSONAL STYLES -->
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-    <title>Webcam App</title>
+
+    <title>Travel Spy | A Better Way to Travel</title>
 </head>
 
 <body>
 
-    <nav class="navbar-wrap navbar navbar-expand-lg navbar-light bg-dark justify-content-end">
-        <div class="navbar">
-            <img id="brand" src="" alt="">
-            <a class="text-light px-2" id="account-btn" href="#">Account</a>
-            <a class="text-light px-2" id="logout-btn" href="#">Logout</a>
+    <nav class="navbar-wrap navbar navbar-expand-lg navbar-light">
+        <img class="mr-2" id="brand" src="assets/images/logo_transparent1.png" alt="Travel Spy Logo" style="width:100px; height:100px">
+        <form class="search-form" action="">
+            <div class="text-center text-light" id="slogan">Visualize your next adventure!</div>
+            <input class="text-center" id="search-bar" type="text" placeholder="Enter Dream Destination" name="search">
+            <button class="py-0 btn btn-dark" id="search-btn" type="submit">Spy</button>
+        </form>
+        <div class="nav-links d-inline">
+        <a class="pr-2" id="account-btn" href="#">Account</a>
+            <a class="pl-2" id="logout-btn" href="#">Logout</a>
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <div class="mb-4 container">
 
         <div class="media-wrap">
-            <div class="webcam-title text-center">
-                <h2>Webcam</h2>
-            </div>
-            <div class="webcam text-center">
-                <img src="assets/images/Wang.jpg" alt="Kyle Wang" style="height:300px; width:450px">
-            </div>
-            <div class="webcam-location text-center">
-                <h4>Location</h4>
-            </div>
-        </div>
-        
-        <div class="search-wrap text-center">
-            <form action="">
-                <label class="mt-3 search-label" for="search-bar">Find Your Next Destination:</label>
-                <br>
-                <input id="search-bar" type="text" placeholder="Search" name="search">
-                <button id="search-btn" type="submit">Submit</button>
-            </form>
-            <div id="results-tiel">Results: </div>
+            <div class="webcam-div text-center"></div>
         </div>
 
-        <div class="travel-wrap">
+        <!-- <div class="travel-wrap">
             <table class="travel-table table">
                 <thead class="travel-thead thead">
                     <span class="travel-info-title text-center">
-                        <h2>Travel Info</h2>
+                        <h4>Travel Info</h4>
                     </span>
                     <tr>
                         <th scope="col">Name</th>
@@ -71,7 +63,7 @@
         <div class="favorites-wrap">
             <table class="favorites-table table">
                 <div class="favorites-title text-center">
-                    <h2>Favorites</h2>
+                    <h4>Favorites</h4>
                 </div>
                 <thead class="favorites-thead thead text-center">
                     <tr>
@@ -81,21 +73,18 @@
                     <tr>
                 </thead>
             </table>
-        </div>
-
+        </div> -->
     </div>
 
+
+    <!-- WEBCAM API SCRIPT -->
+    <script async type="text/javascript" src="https://api.lookr.com/embed/script/player.js"></script>
     <!-- BOOTSTRAP JQUERY & JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- FIREBASE -->
     <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
-
     <!-- PERSONAL JS -->
     <script src="assets/javascript/logic.js"></script>
 </body>

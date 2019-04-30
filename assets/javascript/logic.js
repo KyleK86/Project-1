@@ -11,7 +11,9 @@ let config = {
 firebase.initializeApp(config);
 let database = firebase.database;
 
+
 // Function to make ajax call with user input and populate 10 webcam previews based on distance
+
 $(document).on('click', '#search-btn', function () {
 	event.preventDefault();
 	let webcamKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';

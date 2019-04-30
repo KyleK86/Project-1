@@ -1,4 +1,3 @@
-
 // Initialize Firebase
 let config = {
 	apiKey: "AIzaSyA_VBvhCQwkbk792q9BVCv19uC-SAMm8-M",
@@ -16,63 +15,81 @@ let database = firebase.database;
 
 $(document).on('click', '#search-btn', function () {
 	event.preventDefault();
-	let webcamKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
-	let coordinates = $('#search-bar').val().trim();
-	let orderBy = 'distance';
-	let webcamHost = 'https://webcamstravel.p.rapidapi.com/webcams/list/property=live/nearby=' + coordinates + '/orderby=' + orderBy + '/limit=24?show=webcams:image,url,player,location';
+
+	let geocodeKey = 'AIzaSyC2z-v8BYL87BcckVHVlaHh2kMPsauIln4'
+	let destination = $('#search-bar').val().trim().replace(' ', "+");
+	let geocodeHost = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + destination + '&key=' + geocodeKey;
 	$.ajax({
-		url: webcamHost,
+		url: geocodeHost,
+		method: 'GET'
+	}).then(function (response) {
+		// console.log(response);
+		let longitude = response.results[0].geometry.location.lng;
+		let latitude = response.results[0].geometry.location.lat;
+		let coordinates = longitude + "," + latitude + ",1000";
+
+		console.log(coordinates);
+		getCams(coordinates);
+	});
+});
+
+function getCams(coordinates) {
+	let webcamKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
+	let queryURL = 'https://webcamstravel.p.rapidapi.com/webcams/list/property=live/nearby=' + coordinates + '/orderby=distance/limit=24?show=webcams:image,player,location';
+	$.ajax({
+		url: queryURL,
 		method: 'GET',
 		headers: {
 			"X-RapidAPI-Key": webcamKey,
 			"X-RapidAPI-Host": "webcamstravel.p.rapidapi.com"
 		}
-	}).then(function (response) {
+	}).then(function (responseCam) {
 		// Create variable to hold response data
-		let data = response.result
+		let data = responseCam.result
 		// Test / Debug
 		// console.log(data);
-		// console.log(data.webcams[0].image.current.preview);
+		console.log(responseCam);
 		
-		// Create div to display contents to HTML
-		let dataDiv = $("<div>");
-		dataDiv.addClass("dataDiv");
 
-		// Iterate and parse through data
-		for (var i = 0; i < data.webcams.length; i++) {
-			// Create div to hold each of the data results contents
-			let dataResult = $("<div>");
-			dataResult.addClass("dataResult");
+		// // Create div to display contents to HTML
+		// let dataDiv = $("<div>");
+		// dataDiv.addClass("dataDiv");
 
-			// Create variables to hold webcam location and HTML ref
-			let country = data.webcams[i].location.country;
-			let city = data.webcams[i].location.city;
-			let location = "<small>" + country + ", " + city + "</small>";
+		// // Iterate and parse through data
+		// for (var i = 0; i < data.webcams.length; i++) {
+		// 	// Create div to hold each of the data results contents
+		// 	let dataResult = $("<div>");
+		// 	dataResult.addClass("dataResult");
 
-			// Create an anchor tag to nest each webcam preview and make them links
-			let webcamURL = $("<a>");
-			webcamURL.addClass("url");
-			webcamURL.attr("href", data.webcams[i].url.current.desktop);
-			webcamURL.attr("target", "_blank");
+		// 	// Create variables to hold webcam location and HTML ref
+		// 	let country = data.webcams[i].location.country;
+		// 	let city = data.webcams[i].location.city;
+		// 	let location = "<small>" + country + ", " + city + "</small>";
 
-			// Create an img tag to display each webcam preview
-			let previewTag = $("<img>");
-			previewTag.addClass("webcam");
-			previewTag.attr("src", data.webcams[i].image.current.preview);
-			previewTag.attr("alt", data.webcams[i].title);
-			
+		// 	// Create an anchor tag to nest each webcam preview and make them links
+		// 	let webcamURL = $("<a>");
+		// 	webcamURL.addClass("url");
+		// 	webcamURL.attr("href", data.webcams[i].player.live.embed);
+		// 	webcamURL.attr("target", "_blank");
 
-			webcamURL.prepend(previewTag);
-			// Prepend webcam and location to "dataResult"
-			dataResult.prepend(webcamURL);
-			dataResult.prepend(location);
-			// Prepend "dataResult" to "dataDiv"
-			dataDiv.prepend(dataResult);
-		}
-		// Display "dataDiv" containing all contents to HTML
-		$('.webcam-div').prepend(dataDiv);
+		// 	// Create an img tag to display each webcam preview
+		// 	let previewTag = $("<img>");
+		// 	previewTag.addClass("webcam");
+		// 	previewTag.attr("src", data.webcams[i].image.current.preview);
+		// 	previewTag.attr("alt", data.webcams[i].title);
+
+
+		// 	webcamURL.prepend(previewTag);
+		// 	// Prepend webcam and location to "dataResult"
+		// 	dataResult.prepend(webcamURL);
+		// 	dataResult.prepend(location);
+		// 	// Prepend "dataResult" to "dataDiv"
+		// 	dataDiv.prepend(dataResult);
+		// }
+		// // Display "dataDiv" containing all contents to HTML
+		// $('.webcam-div').prepend(dataDiv);
 	});
-});
+}
 
 
 

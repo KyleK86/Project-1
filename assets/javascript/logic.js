@@ -22,10 +22,12 @@ $(document).on('click', '#search-btn', function () {
 		url: geocodeHost,
 		method: 'GET'
 	}).then(function (response) {
+		let geoData = response.results[0];
 		// Test / Debug
-		console.log(response);
-		let longitude = response.results[0].geometry.location.lng;
-		let latitude = response.results[0].geometry.location.lat;
+		console.log(geoData);
+	
+		let longitude = geoData.geometry.location.lng;
+		let latitude = geoData.geometry.location.lat;
 		let coordinates = latitude + "," + longitude+ ",1000";
 		getCams(coordinates);
 	});
@@ -34,7 +36,8 @@ $(document).on('click', '#search-btn', function () {
 // Function to retrieve webcams based on the converted location (coordinates) produced by Geocoding
 function getCams(coordinates) {
 	let webcamKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
-	let queryURL = 'https://webcamstravel.p.rapidapi.com/webcams/list/property=live/nearby=' + coordinates + '/orderby=distance/limit=9?show=webcams:image,player,location';
+	let show = 'image,player,location'
+	let queryURL = 'https://webcamstravel.p.rapidapi.com/webcams/list/property=live/nearby=' + coordinates + '/orderby=distance/limit=9?show=categories;webcams:' + show;
 	$.ajax({
 		url: queryURL,
 		method: 'GET',
@@ -46,12 +49,10 @@ function getCams(coordinates) {
 	}).then(function (responseCam) {
 		let data = responseCam.result;
 		// Create div to display contents to HTML
-		let dataDiv = $("<div>");
-		dataDiv.addClass("dataDiv");
+		let dataDiv = $("<div>").addClass("dataDiv");
 		// Test / Debug
-		// console.log(responseCam);
-		// console.log(data);
-
+		console.log(data);
+		
 		// Iterate and parse through data
 		for (var i = 0; i < data.webcams.length; i++) {
 			// Create variables to hold webcam location
@@ -61,12 +62,13 @@ function getCams(coordinates) {
 
 			// Dynamically create a Bootstrap image card to display each webcam preview
 			let card = $("<div>").addClass("card");
+			let imgLink = $("<a>").addClass("img-link").attr("href", data.webcams[i].player.live.embed).attr("target", "_blank");
 			let cardImg = $("<img>").addClass("webcam").addClass("card-img-top");
 			cardImg.attr("src", data.webcams[i].image.current.preview).attr("alt", data.webcams[i].title);
 			let cardBody = $("<div>").addClass("card-body");
 			let cardTitle = $("<p>").addClass("card-title").text(location);
 			let cardText = $("<p>").addClass("card-text");
-			let button = $("<a>").addClass("btn btn-dark py-1")
+			let button = $("<a>").addClass("travel-btn btn btn-dark py-1")
 			button.attr("href", data.webcams[i].player.live.embed).attr("target", "_blank");
 			button.text("Take me here!");
 			
@@ -74,15 +76,21 @@ function getCams(coordinates) {
 			cardBody.append(cardTitle);
 			cardBody.append(cardText);
 			cardBody.append(button);
+			imgLink.append(cardImg)
 			card.append(cardBody);
-			card.prepend(cardImg);
+			card.prepend(imgLink);
 			// Attach to div
-			dataDiv.prepend(card);
+			dataDiv.append(card);
 		}
 		// Display "dataDiv" containing card to HTML
-		$('.webcam-div').append(dataDiv);
+		$('.webcam-div').prepend(dataDiv);
 	});
 }
+
+$(document).on("click", ".travel-btn", function() {
+	event.preventDefault();
+	
+})
 
 
 //.done(function to render nearest webcam and list of nearby cams to html)

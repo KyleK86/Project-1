@@ -37,7 +37,9 @@ $(document).on('click', '#search-btn', function () {
 function getCams(coordinates) {
 	let webcamKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
 	let show = 'image,player,location'
+
 	let queryURL = 'https://webcamstravel.p.rapidapi.com/webcams/list/property=day,hd/nearby=' + coordinates + '/orderby=distance/limit=9?show=categories;webcams:' + show;
+
 	$.ajax({
 		url: queryURL,
 		method: 'GET',
@@ -62,7 +64,9 @@ function getCams(coordinates) {
 
 			// Dynamically create a Bootstrap image card to display each webcam preview
 			let card = $("<div>").addClass("card");
+
 			let imgLink = $("<a>").addClass("img-link").attr("href", data.webcams[i].player.year.embed).attr("target", "_blank");
+
 			let cardImg = $("<img>").addClass("webcam").addClass("card-img-top");
 			cardImg.attr("src", data.webcams[i].image.current.preview).attr("alt", data.webcams[i].title);
 			let cardBody = $("<div>").addClass("card-body");
@@ -82,8 +86,10 @@ function getCams(coordinates) {
 			// Attach to div
 			dataDiv.append(card);
 		}
+
 		// Empty HTML div and display "dataDiv" containing cards
 		$('.webcam-div').empty();
+
 		$('.webcam-div').prepend(dataDiv);
 	});
 }

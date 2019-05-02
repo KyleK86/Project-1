@@ -1,4 +1,3 @@
-
 // Initialize Firebase
 let config = {
 	apiKey: "AIzaSyA_VBvhCQwkbk792q9BVCv19uC-SAMm8-M",
@@ -25,17 +24,18 @@ $(document).on('click', '#search-btn', function () {
 		let geoData = response.results[0];
 		// Test / Debug
 		console.log(geoData);
-	
+
 		let longitude = geoData.geometry.location.lng;
 		let latitude = geoData.geometry.location.lat;
-		let coordinates = latitude + "," + longitude+ ",1000";
+		let coordinates = latitude + "," + longitude + ",1000";
 		getCams(coordinates);
 	});
 });
 
 // Function to retrieve webcams based on the converted location (coordinates) produced by Geocoding
+let rapidKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
+
 function getCams(coordinates) {
-	let webcamKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
 	let show = 'image,player,location'
 
 	let queryURL = 'https://webcamstravel.p.rapidapi.com/webcams/list/property=day,hd/nearby=' + coordinates + '/orderby=distance/limit=9?show=categories;webcams:' + show;
@@ -45,7 +45,7 @@ function getCams(coordinates) {
 		method: 'GET',
 		contentType: 'application/json; charset=utf-8',
 		headers: {
-			"X-RapidAPI-Key": webcamKey,
+			"X-RapidAPI-Key": rapidKey,
 			"X-RapidAPI-Host": "webcamstravel.p.rapidapi.com"
 		}
 	}).then(function (responseCam) {
@@ -53,8 +53,7 @@ function getCams(coordinates) {
 		// Create div to display contents to HTML
 		let dataDiv = $("<div>").addClass("dataDiv");
 		// Test / Debug
-		console.log(data);
-		
+
 		// Iterate and parse through data
 		for (var i = 0; i < data.webcams.length; i++) {
 			// Create variables to hold webcam location
@@ -75,7 +74,7 @@ function getCams(coordinates) {
 			let button = $("<a>").addClass("travel-btn btn btn-dark py-1")
 			button.attr("href", data.webcams[i].player.live.embed).attr("target", "_blank");
 			button.text("Take me here!");
-			
+
 			// Build card
 			cardBody.append(cardTitle);
 			cardBody.append(cardText);
@@ -94,9 +93,26 @@ function getCams(coordinates) {
 	});
 }
 
-$(document).on("click", ".travel-btn", function() {
+$(document).on("click", ".travel-btn", function () {
 	event.preventDefault();
-	
+	$.ajax({
+		url: "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0",
+		method: "POST",
+		headers: {
+			"X-RapidAPI-Host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
+			"X-RapidAPI-Key": rapidKey
+		},
+		data: {
+			"country": "US",
+			"currency": "USD",
+			"locale": "en-US",
+			"LHR-sky": "2019-09-1",
+			"adults": 1
+		},
+	}).then(function (response) {
+		console.log(response);
+	})
+
 })
 
 

@@ -190,6 +190,7 @@ $(document).on("click", "#logout-btn", function () {
 		$("#fav-btn").hide();
 		$("#categories-btn").hide();
 		$("#pop-btn").hide();
+		$(".webcam-div").empty();
 	}, function (error) {
 		console.error('Sign Out Error', error);
 	});

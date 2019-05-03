@@ -79,7 +79,16 @@ button {
 
 .card-body p,
 .card-title {
-    margin-bottom: 0.25em
+    margin-bottom: 0.25em;
+}
+
+.fa-heart {
+    transition: all 0.25s;
+}
+
+.fa-heart:hover {
+    cursor: pointer;
+    transform: scale(1.25);
 }
 
 #mobileAd {
@@ -91,8 +100,4 @@ button {
 .table thead th {
     border-bottom: 1px solid black;
     border-top: 1px solid black;
-}
-
-isClicked {
-    color: red;
 }

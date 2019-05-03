@@ -47,7 +47,7 @@
         <form class="search-form" action="">
             <div class="text-center text-light" id="slogan">Visualize your next adventure!</div>
             <input class="text-center" id="search-bar" type="text" placeholder="Enter Dream Destination" name="search">
-            <button class="py-0 btn btn-dark" id="search-btn" type="submit">Spy</button>
+            <button class="py-0 mb-2 btn btn-dark" id="search-btn" type="submit">Spy</button>
         </form>
     </div>
 
@@ -64,7 +64,20 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div id="account-info"></div>
+                    <div id="account-info">
+                        <table class="table table-sm table-hover" id='table-data'>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Email Verified</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="m-auto btn btn-secondary" data-dismiss="modal">Close</button>
@@ -72,6 +85,8 @@
             </div>
         </div>
     </div>
+
+
 
     <!-- Media Area
     ========================================================================================================= -->

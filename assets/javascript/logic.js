@@ -37,8 +37,13 @@ firebase.auth().onAuthStateChanged(function(user) {
 		var userFavRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid);
 		userFavRef.on('child_added', function(snapshot) {
 			for (var i in snapshot.val()) {
-				let name = snapshot.val()[i].camTitle.addClass('dropdown-item');
-				$(".dropdown-menu").append(name);
+				let favDiv = $("<div>")
+				let link = $("<a>").attr("href", data.webcams[i].player.year.embed);
+				link.addClass('dropdown-item')
+				link.text(snapshot.val()[i].camTitle);
+
+				favDiv.append(link);
+				$(".dropdown-menu").append(favDiv);
 			}
 			console.log(snapshot.val());
 		})

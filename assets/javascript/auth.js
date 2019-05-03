@@ -18,9 +18,6 @@ initApp = function () {
             console.log("Email Verified: " + emailVerified);
             console.log("User ID: " + uid);
 
-            
-            
-        
             // Hide login button and display account & logout buttons
             $("#login-btn").hide();
             $("#logout-btn").show();
@@ -28,8 +25,6 @@ initApp = function () {
             $("#fav-btn").show();
             $("#categories-btn").show();
             $("#pop-btn").show();
-
-            
 
             // Diplay username to navbar
             $("#display-name").html("Username: " + name);
@@ -43,7 +38,7 @@ initApp = function () {
             $("#account-info").append(div);
         } else {
             // User is signed out
-            console.log("Logged In: False");
+            console.log('Signed Out');
         }
     }, function (error) {
         console.log(error);

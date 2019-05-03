@@ -67,7 +67,7 @@ function getCams(coordinates) {
 		// Create div to display contents to HTML
 		let dataDiv = $("<div>").addClass("dataDiv");
 		// Test / Debug
-		console.log(data);
+		// console.log(data);
 		
 
 		// Iterate and parse through data
@@ -130,7 +130,12 @@ $(document).on("click", ".travel-btn", function () {
 // Logout Function
 $(document).on("click", "#logout-btn", function () {
 	firebase.auth().signOut().then(function () {
-		console.log('Signed Out');
+		$("#login-btn").show();
+		$("#logout-btn").hide();
+		$("#account-btn").hide();
+		$("#fav-btn").hide();
+		$("#categories-btn").hide();
+		$("#pop-btn").hide();
 	}, function (error) {
 		console.error('Sign Out Error', error);
 	});

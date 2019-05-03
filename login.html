@@ -1,48 +1,54 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- BOOTSTRAP -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- Styles -->
     <style>
         body {
             background: rgb(133, 133, 133);
         }
+
         h1 {
             font-variant: small-caps;
             font-family: Arial, Helvetica, sans-serif;
         }
-        #firebaseui-auth-container > div {
+
+        #firebaseui-auth-container>div {
             background: black;
             padding: 1em;
             border-radius: 5px;
             box-shadow: 5px 5px 15px 5px #333;
         }
+
         #firebaseui-auth-container p {
             color: white;
         }
+
         .firebaseui-textfield.mdl-textfield .firebaseui-input {
             border-color: rgb(133, 133, 133, 0.5);
             color: #ebebeb;
             padding: 0.15em;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.11.0/firebase.js"></script>
     <script>
-    // Initialize Firebase
-    var config = {
-        apiKey: "AIzaSyBOyHz9lESYUIk5wGDidBsfohbE8TQq-y4",
-        authDomain: "travel-spy-treez-1556572026545.firebaseapp.com",
-        databaseURL: "https://travel-spy-treez-1556572026545.firebaseio.com",
-        projectId: "travel-spy-treez-1556572026545",
-        storageBucket: "travel-spy-treez-1556572026545.appspot.com",
-        messagingSenderId: "460774115127"
-    };
-    firebase.initializeApp(config);
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBOyHz9lESYUIk5wGDidBsfohbE8TQq-y4",
+            authDomain: "travel-spy-treez-1556572026545.firebaseapp.com",
+            databaseURL: "https://travel-spy-treez-1556572026545.firebaseio.com",
+            projectId: "travel-spy-treez-1556572026545",
+            storageBucket: "travel-spy-treez-1556572026545.appspot.com",
+            messagingSenderId: "460774115127"
+        };
+        firebase.initializeApp(config);
     </script>
     <!-- Initialize sign-in widget from FirebaseUI Web
     =========================================================== -->
@@ -74,6 +80,7 @@
     </script>
     <title>Travel Spy Login</title>
 </head>
+
 <body>
     <div class="my-1 container">
         <div class="jumbotron">
@@ -82,10 +89,11 @@
             </div>
         </div>
     </div>
-        <div id="firebaseui-auth-container"></div>
+    <div id="firebaseui-auth-container"></div>
 
     <!-- PERSONAL JS -->
     <script src="assets/javascript/auth.js"></script>
     <script src="assets/javascript/logic.js"></script>
 </body>
+
 </html>

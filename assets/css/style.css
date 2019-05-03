@@ -41,6 +41,9 @@ button {
     align-self: flex-start;
     padding: 0.15em 1em;
 }
+.dropdown-menu {
+    position: inherit;
+}
 
 /* Search Bar
 ================================================================= */

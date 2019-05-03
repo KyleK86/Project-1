@@ -16,24 +16,33 @@ var dbUserObject = firebase.database().ref().child('users')
 var dbUserFav = dbUserObject.child('favorites')
 
 // Synchronize database object
-// dbUserObject.on('value', snap => console.log(snap.val()));
+dbUserObject.on('value', snap => 
+(snap.val()));
 // // Synchronize database user 'favorites' when item is added
-// dbUserFav.on('child_added', snap => console.log(snap.val()));
+dbUserFav.on('child_added', snap => console.log(snap.val()));
 // Synchronize database user 'favorites' when item is changed
 // Synchronize database user 'favorites' when item is removed
 
 //CLICK FUNCTION TO ADD FAVORITE TO DATABASE
 $(document).on('click', '.fa-heart', function () {
 	let camURL = $(this).attr('data-url');
+	let camTitle = $(this).attr('data-title');
+	let camObj = {
+		camURL : camURL,
+		camTitle : camTitle
+	}
+	// References
 	let userID = firebase.auth().currentUser.uid;
 	let user = firebase.database().ref("users/" + userID);
-	user.child('favorites').push(camURL);
+	user.child('favorites').push(camObj);
+
+	// Add favorite to dropdown list
+	let favoriteItem = $("<a>").addClass("dropdown-item").attr("href", camURL).text(camTitle);
+	$(".dropdown-menu").append(favoriteItem);
 
 	// for (var i = 0;i<dbUserFav.length;i++){
 
 	// }
-
-
 
 })
 
@@ -103,6 +112,8 @@ function getCams(coordinates) {
 			let favIcon = $("<i>").addClass("px-2 fas fa-heart");
 			favIcon.attr("data-url", data.webcams[i].player.year.embed);
 			favIcon.attr("data-img", data.webcams[i].image.current.preview);
+			favIcon.attr("data-title", data.webcams[i].title);
+
 
 
 

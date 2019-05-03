@@ -5,24 +5,20 @@ initApp = function () {
             // User is signed in.
 
             // Get user profile
-            var name, email, uid, emailVerified;
+            var name, email, uid;
             name = user.displayName;
-            email = user.email;
-            emailVerified = user.emailVerified;
             uid = user.uid;
 
             var userItem = {
                 'name': name,
-                'email': email,
-                'emailVerified': emailVerified,
-                'favorites': ["nothing"]
+                'favorites': [""]
             };
             firebase.database().ref("/users/" + uid).set(userItem);
 
+            // Log user data
             console.log("Display Name: " + name);
-            console.log("Email: " + email);
-            console.log("Email Verified: " + emailVerified);
             console.log("User ID: " + uid);
+            // console.log("Email: " + email);
 
             // Hide login button and display account & logout buttons
             $("#login-btn").hide();

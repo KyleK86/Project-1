@@ -14,7 +14,6 @@ initApp = function () {
             // console.log("Email: " + email);
             // console.log("Email Verified: " + emailVerified);
             // console.log("User ID: " + uid);
-
             // Hide login button and display account & logout buttons
             $("#login-btn").hide();
             $("#logout-btn").show();

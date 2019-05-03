@@ -15,6 +15,21 @@ $.ajax({
 }).then(function (response) {
 	authToken = response.access_token;
 })
+let lufthansaToken;
+$.ajax({
+	url: "https://api.lufthansa.com/v1/oauth/token",
+	method: "POST",
+	data: {
+		client_id: "hfx529s9n9y4usqmkueb7qug",
+		client_secret: "Z39Xqv5sCX",
+		grant_type: "client_credentials"
+	}
+}).then(function (response) {
+
+	lufthansaToken = response.access_token;
+
+})
+
 var config = {
 	apiKey: "AIzaSyBOyHz9lESYUIk5wGDidBsfohbE8TQq-y4",
 	authDomain: "travel-spy-treez-1556572026545.firebaseapp.com",
@@ -59,8 +74,8 @@ $(document).on('click', '.fa-heart', function () {
 
 
 })
-let longitude;
 let latitude;
+let longitude;
 // Click function populates 9 webcams that are sorted by distance based on user input
 $(document).on('click', '#search-btn', function () {
 	event.preventDefault();
@@ -79,6 +94,7 @@ $(document).on('click', '#search-btn', function () {
 		latitude = geoData.geometry.location.lat;
 		let coordinates = latitude + "," + longitude + ",1000";
 		getCams(coordinates);
+		getAirports(latitude, longitude);
 	});
 });
 
@@ -89,7 +105,6 @@ let rapidKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
 function getCams(coordinates) {
 	let show = 'image,player,location'
 	let queryURL = 'https://webcamstravel.p.rapidapi.com/webcams/list/property=day,hd/nearby=' + coordinates + '/orderby=distance/limit=9?show=categories;webcams:' + show;
-
 	$.ajax({
 		url: queryURL,
 		method: 'GET',
@@ -148,13 +163,27 @@ function getCams(coordinates) {
 		$('.webcam-div').prepend(dataDiv);
 	});
 }
+
+function getAirports(latitude, longitude) {
+	let qUrl = "https://api-test.lufthansa.com/v1/references/airports/nearest/" + latitude + "," + longitude;
+	$.ajax({
+		url: qUrl,
+		headers: {
+			Authorization: "Bearer " + lufthansaToken,
+			Accept: "application/json"
+		},
+		method: "GET"
+	}).then(function (response) {
+
+		console.log(response);
+	})
+}
 // Click function that makes Ajax call to retrieve flight information
 $(document).on("click", ".travel-btn", function () {
 	event.preventDefault();
 	let origin = "MAD";
 	let destination = "MUC";
-	let coord = "lat=" + latitude + "&lng=" + longitude;
-
+	let coordinates = "lat=" + latitude + "&lng=" + longitude;
 	let bookingQuery = "https://test.api.amadeus.com/v1/shopping/flight-dates?origin=" + origin + "&destination=" + destination;
 	$.ajax({
 		headers: {

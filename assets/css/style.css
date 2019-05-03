@@ -1,4 +1,3 @@
-
 body {
     background: url("../images/railayBeachBG.jpg") no-repeat center center fixed;
     background-size: cover;
@@ -61,6 +60,7 @@ button {
     font-family: 'Roboto Mono', monospace;
     font-variant: small-caps;
 }
+
 /* WEBCAM / MEDIA
 ================================================================= */
 .card {
@@ -87,4 +87,8 @@ button {
 .table thead th {
     border-bottom: 1px solid black;
     border-top: 1px solid black;
+}
+
+isClicked {
+    color: red;
 }

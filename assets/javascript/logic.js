@@ -130,6 +130,7 @@ function getCams(coordinates) {
 
 
 
+
 			// Build card
 			cardBody.append(cardTitle);
 			cardBody.append(cardText);
@@ -148,6 +149,13 @@ function getCams(coordinates) {
 		$('.webcam-div').prepend(dataDiv);
 	});
 }
+
+$(document).on("click", ".fa-heart", function () {
+	$(this).attr("style", "color:aqua");
+})
+
+
+
 // Click function that makes Ajax call to retrieve flight information
 $(document).on("click", ".travel-btn", function () {
 	event.preventDefault();

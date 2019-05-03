@@ -1,4 +1,3 @@
-
 // Initialize Firebase
 var config = {
 	apiKey: "AIzaSyBOyHz9lESYUIk5wGDidBsfohbE8TQq-y4",
@@ -11,18 +10,32 @@ var config = {
 firebase.initializeApp(config);
 var database = firebase.database();
 
+
 // References
 var dbUserObject = firebase.database().ref().child('users')
 var dbUserFav = dbUserObject.child('favorites')
 
 // Synchronize database object
-dbUserObject.on('value', snap => console.log(snap.val()));
-// Synchronize database user 'favorites' when item is added
-dbUserFav.on('child_added', snap => console.log(snap.val()));
+// dbUserObject.on('value', snap => console.log(snap.val()));
+// // Synchronize database user 'favorites' when item is added
+// dbUserFav.on('child_added', snap => console.log(snap.val()));
 // Synchronize database user 'favorites' when item is changed
 // Synchronize database user 'favorites' when item is removed
 
+//CLICK FUNCTION TO ADD FAVORITE TO DATABASE
+$(document).on('click', '.fa-heart', function () {
+	let camURL = $(this).attr('data-url');
+	let userID = firebase.auth().currentUser.uid;
+	let user = firebase.database().ref("users/" + userID);
+	user.child('favorites').push(camURL);
 
+	// for (var i = 0;i<dbUserFav.length;i++){
+
+	// }
+
+
+
+})
 
 // Click function populates 9 webcams that are sorted by distance based on user input
 $(document).on('click', '#search-btn', function () {
@@ -68,7 +81,7 @@ function getCams(coordinates) {
 		let dataDiv = $("<div>").addClass("dataDiv");
 		// Test / Debug
 		// console.log(data);
-		
+
 
 		// Iterate and parse through data
 		for (var i = 0; i < data.webcams.length; i++) {
@@ -85,17 +98,24 @@ function getCams(coordinates) {
 			let cardBody = $("<div>").addClass("card-body");
 			let cardTitle = $("<p>").addClass("card-title").text(location);
 			let cardText = $("<p>").addClass("card-text");
-			let button = $("<a>").addClass("travel-btn btn btn-dark py-1")
-			button.attr("href", data.webcams[i].player.live.embed).attr("target", "_blank");
+			let button = $("<a>").addClass("travel-btn btn btn-dark py-1");
 			button.text("Take me here!");
+			let favIcon = $("<i>").addClass("px-2 fas fa-heart");
+			favIcon.attr("data-url", data.webcams[i].player.year.embed);
+			favIcon.attr("data-img", data.webcams[i].image.current.preview);
+
+
+
 
 			// Build card
 			cardBody.append(cardTitle);
 			cardBody.append(cardText);
 			cardBody.append(button);
+			cardBody.append(favIcon);
 			imgLink.append(cardImg)
 			card.append(cardBody);
 			card.prepend(imgLink);
+
 
 			// Attach card to div
 			dataDiv.append(card);

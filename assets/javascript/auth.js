@@ -15,7 +15,7 @@ initApp = function () {
                 'name': name,
                 'email': email,
                 'emailVerified': emailVerified,
-                'favorites': []
+                'favorites': ["nothing"]
             };
             firebase.database().ref("/users/" + uid).set(userItem);
 

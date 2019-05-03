@@ -17,7 +17,6 @@ $.ajax({
 })
 var config = {
 	apiKey: "AIzaSyBOyHz9lESYUIk5wGDidBsfohbE8TQq-y4",
-	authDomain: "travel-spy-treez-1556572026545.firebaseapp.com",
 	databaseURL: "https://travel-spy-treez-1556572026545.firebaseio.com",
 	projectId: "travel-spy-treez-1556572026545",
 	storageBucket: "travel-spy-treez-1556572026545.appspot.com",
@@ -33,32 +32,39 @@ try {
 
 var database = firebase.database();
 
+firebase.auth().onAuthStateChanged(function(user) {
+	if (user) {
+		var userFavRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid);
+		userFavRef.on('child_added', function(snapshot) {
+			for (var i in snapshot.val()) {
+				let name = snapshot.val()[i].camTitle.addClass('dropdown-item');
+				$(".dropdown-menu").append(name);
+			}
+			console.log(snapshot.val());
+		})
+	}
+})
 
-// References
-var dbUserObject = firebase.database().ref().child('users')
-var dbUserFav = dbUserObject.child('favorites')
 
-// Synchronize database object
-// dbUserObject.on('value', snap => console.log(snap.val()));
 // // Synchronize database user 'favorites' when item is added
-// dbUserFav.on('child_added', snap => console.log(snap.val()));
-// Synchronize database user 'favorites' when item is changed
-// Synchronize database user 'favorites' when item is removed
+// dbUserFav.on('child_added', function(snapshot) {
+// 	console.log(snapshot.val())
+// });
 
-//CLICK FUNCTION TO ADD FAVORITE TO DATABASE
+// Click function to add favorites to database and dropdown menu
 $(document).on('click', '.fa-heart', function () {
 	let camURL = $(this).attr('data-url');
+	let camTitle = $(this).attr('data-title');
+	let camData = {
+		camURL : camURL,
+		camTitle : camTitle
+	}
 	let userID = firebase.auth().currentUser.uid;
 	let user = firebase.database().ref("users/" + userID);
-	user.child('favorites').push(camURL);
-
-	// for (var i = 0;i<dbUserFav.length;i++){
-
-	// }
+	user.child('favorites').push(camData);
+});
 
 
-
-})
 let longitude;
 let latitude;
 // Click function populates 9 webcams that are sorted by distance based on user input
@@ -126,9 +132,7 @@ function getCams(coordinates) {
 			let favIcon = $("<i>").addClass("px-2 fas fa-heart");
 			favIcon.attr("data-url", data.webcams[i].player.year.embed);
 			favIcon.attr("data-img", data.webcams[i].image.current.preview);
-
-
-
+			favIcon.attr("data-title", data.webcams[i].title);
 
 			// Build card
 			cardBody.append(cardTitle);

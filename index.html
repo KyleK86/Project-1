@@ -13,11 +13,9 @@
     <!-- RESET -->
     <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
     <!-- BOOTSTRAP -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!--FONTAWESOME-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <!-- PERSONAL STYLES -->
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
@@ -31,23 +29,18 @@
         <img class="mr-2" id="brand" src="assets/images/logo_transparent1.png" alt="Travel Spy Logo"
             style="width:75px; height:75px">
         <button class="nav-link" id="pop-btn" style="display:none">Popular</button>
-        <button class="nav-link" id="categories-btn" role="button" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false" style="display:none">Categories</button>
-        <div class="dropdown-menu" aria-labelledby="categories-btn">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
+        <div class="button-group">
+            <button class="nav-link" id="categories-btn" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:none">Categories</button>
+            <div class="dropdown-menu" aria-labelledby="categories-btn">
+            </div>
         </div>
-        <button class="nav-link" id="fav-btn" role="button" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false" style="display:none">Favorites</button>
-        <div class="dropdown-menu" aria-labelledby="fav-btn">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
+        <div class="button-group">
+            <button class="nav-link" id="fav-btn" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:none">Favorites</button>
+            <div class="dropdown-menu" aria-labelledby="fav-btn">
+            </div>
         </div>
         <button class="nav-link" id="login-btn" onclick="window.location.href='login.html'">Login</button>
-        <button class="nav-link" id="account-btn" data-toggle="modal" data-target="#modal-account"
-            style="display:none">Account</button>
+        <button class="nav-link" id="account-btn" data-toggle="modal" data-target="#modal-account" style="display:none">Account</button>
         <button class="nav-link" id="logout-btn" style="display:none">Logout</button>
     </nav>
     <div class="container">

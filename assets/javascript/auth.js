@@ -1,4 +1,3 @@
-
 // Callback function to track the Auth state
 initApp = function () {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -6,13 +5,20 @@ initApp = function () {
             // User is signed in.
 
             // Get user profile
-            var name, email, emailVerified, uid;
-     
-            name=user.displayName,
-            email=user.email,
-            emailVerified=user.emailVerified,
-            uid=user.uid
-     
+            var name, email, uid, emailVerified;
+            name = user.displayName;
+            email = user.email;
+            emailVerified = user.emailVerified;
+            uid = user.uid;
+
+            var userItem = {
+                'name': name,
+                'email': email,
+                'emailVerified': emailVerified,
+                'favorites': []
+            };
+            firebase.database().ref("/users/" + uid).set(userItem);
+
             console.log("Display Name: " + name);
             console.log("Email: " + email);
             console.log("Email Verified: " + emailVerified);
@@ -31,8 +37,8 @@ initApp = function () {
 
             // Build a div filled with account information
             var div = $("<div>").append(
-            $("<p>").html("Username: " + name),
-            $("<p>").html("Email: " + email)
+                $("<p>").html("Username: " + name),
+                $("<p>").html("Email: " + email)
             );
             // Display the account info in modal by appending div
             $("#account-info").append(div);

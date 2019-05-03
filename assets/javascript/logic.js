@@ -14,7 +14,8 @@ $.ajax({
 
 }).then(function (response) {
 	authToken = response.access_token;
-})
+});
+
 let lufthansaToken;
 $.ajax({
 	url: "https://api.lufthansa.com/v1/oauth/token",
@@ -25,7 +26,7 @@ $.ajax({
 		grant_type: "client_credentials"
 	}
 }).then(function (response) {
-
+	console.log(response);
 	lufthansaToken = response.access_token;
 
 })
@@ -76,6 +77,7 @@ $(document).on('click', '.fa-heart', function () {
 })
 let latitude;
 let longitude;
+var origin;
 // Click function populates 9 webcams that are sorted by distance based on user input
 $(document).on('click', '#search-btn', function () {
 	event.preventDefault();
@@ -96,7 +98,38 @@ $(document).on('click', '#search-btn', function () {
 		getCams(coordinates);
 		getAirports(latitude, longitude);
 	});
+
+
+	let dest = $('#origin-input').val().trim().replace(' ', "+");
+	let geocodeHost2 = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + dest + '&key=' + geocodeKey;
+	$.ajax({
+		url: geocodeHost2,
+		method: 'GET'
+	}).then(function (response) {
+		let geoData = response.results[0];
+		// Test / Debug
+		// console.log(geoData);
+		lng = geoData.geometry.location.lng;
+		lat = geoData.geometry.location.lat;
+		setOrigin(lat, lng);
+	});
+
 });
+
+function setOrigin(lat, lng) {
+	let qUrl = "https://api.lufthansa.com/v1/references/airports/nearest/" + lat + "," + lng;
+	let auth = "Bearer " + lufthansaToken;
+	$.ajax({
+		url: qUrl,
+		headers: {
+			Authorization: auth,
+			Accept: "application/json"
+		},
+		method: "GET"
+	}).then(function (response) {
+		origin = response.NearestAirportResource.Airports.Airport[0].CityCode;
+	})
+}
 
 // Variable to hold RapidAPI key
 let rapidKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
@@ -164,30 +197,33 @@ function getCams(coordinates) {
 	});
 }
 
+let dest;
+
 function getAirports(latitude, longitude) {
-	let qUrl = "https://api-test.lufthansa.com/v1/references/airports/nearest/" + latitude + "," + longitude;
+	let qUrl = "https://api.lufthansa.com/v1/references/airports/nearest/" + latitude + "," + longitude;
+	let auth = "Bearer " + lufthansaToken;
 	$.ajax({
 		url: qUrl,
 		headers: {
-			Authorization: "Bearer " + lufthansaToken,
+			Authorization: auth,
 			Accept: "application/json"
 		},
 		method: "GET"
 	}).then(function (response) {
-
 		console.log(response);
+		dest = response.NearestAirportResource.Airports.Airport[0].CityCode;
 	})
 }
+
+
 // Click function that makes Ajax call to retrieve flight information
 $(document).on("click", ".travel-btn", function () {
 	event.preventDefault();
-	let origin = "MAD";
-	let destination = "MUC";
-	let coordinates = "lat=" + latitude + "&lng=" + longitude;
-	let bookingQuery = "https://test.api.amadeus.com/v1/shopping/flight-dates?origin=" + origin + "&destination=" + destination;
+	let bookingQuery = "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=" + origin + "&destination=" + dest + "&departureDate=2019-08-01";
+
 	$.ajax({
 		headers: {
-			"authorization": "Bearer " + authToken
+			Authorization: "Bearer " + authToken
 		},
 		url: bookingQuery,
 		method: "GET"

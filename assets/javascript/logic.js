@@ -1,50 +1,73 @@
+
+// Ajax call to retrieve flight info
+let authToken;
+$.ajax({
+	url: "https://test.api.amadeus.com/v1/security/oauth2/token",
+	method: "POST",
+	headers: {
+		"Content-Type": "application/x-www-form-urlencoded"
+	},
+	data: {
+		grant_type: "client_credentials",
+		client_id: "ESRG39Ac1pHRKKLRaVVf8zUwscrCfWpz",
+		client_secret: "DKoZdVFyAqjzbWYq"
+	}
+	
+}).then(function (response) {
+	authToken = response.access_token;
+})
+
 // Initialize Firebase
 var config = {
 	apiKey: "AIzaSyBOyHz9lESYUIk5wGDidBsfohbE8TQq-y4",
-	authDomain: "travel-spy-treez-1556572026545.firebaseapp.com",
 	databaseURL: "https://travel-spy-treez-1556572026545.firebaseio.com",
 	projectId: "travel-spy-treez-1556572026545",
 	storageBucket: "travel-spy-treez-1556572026545.appspot.com",
 	messagingSenderId: "460774115127"
 };
-firebase.initializeApp(config);
+try {
+	firebase.initializeApp(config)
+} catch (err) {
+	if (!/already exists/.test(err.message)) {
+		console.error('Firebase initialization error', err.stack)
+	}
+}
 var database = firebase.database();
 
+// Function to take items from favorites in Firebase and display them in a dropdown menu
+firebase.auth().onAuthStateChanged(function(user) {
+	if (user) {
+		var userFavRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid);
+		userFavRef.on('child_added', function(snapshot) {
+			for (var i in snapshot.val()) {
+				let link = $("<a>").addClass('dropdown-item').attr("href", snapshot.val()[i].camURL).attr("target", "_blank");
+				link.text(snapshot.val()[i].camTitle);
+				let favDiv = $("<p>")
+	
+				link.append(favDiv);
+				$(".dropdown-menu").append(link);
+				
+				console.log(snapshot.val()[i].camTitle);
+			}
+		})
+	}
+})
 
-// References
-var dbUserObject = firebase.database().ref().child('users')
-var dbUserFav = dbUserObject.child('favorites')
-
-// Synchronize database object
-dbUserObject.on('value', snap => 
-(snap.val()));
-// // Synchronize database user 'favorites' when item is added
-dbUserFav.on('child_added', snap => console.log(snap.val()));
-// Synchronize database user 'favorites' when item is changed
-// Synchronize database user 'favorites' when item is removed
-
-//CLICK FUNCTION TO ADD FAVORITE TO DATABASE
+// Click function to add favorites to database and dropdown menu
 $(document).on('click', '.fa-heart', function () {
 	let camURL = $(this).attr('data-url');
 	let camTitle = $(this).attr('data-title');
-	let camObj = {
+	let camData = {
 		camURL : camURL,
 		camTitle : camTitle
 	}
-	// References
 	let userID = firebase.auth().currentUser.uid;
 	let user = firebase.database().ref("users/" + userID);
-	user.child('favorites').push(camObj);
+	user.child('favorites').push(camData);
+});
 
-	// Add favorite to dropdown list
-	let favoriteItem = $("<a>").addClass("dropdown-item").attr("href", camURL).text(camTitle);
-	$(".dropdown-menu").append(favoriteItem);
-
-	// for (var i = 0;i<dbUserFav.length;i++){
-
-	// }
-
-})
+let longitude;
+let latitude;
 
 // Click function populates 9 webcams that are sorted by distance based on user input
 $(document).on('click', '#search-btn', function () {
@@ -60,9 +83,8 @@ $(document).on('click', '#search-btn', function () {
 		let geoData = response.results[0];
 		// Test / Debug
 		// console.log(geoData);
-
-		let longitude = geoData.geometry.location.lng;
-		let latitude = geoData.geometry.location.lat;
+		longitude = geoData.geometry.location.lng;
+		latitude = geoData.geometry.location.lat;
 		let coordinates = latitude + "," + longitude + ",1000";
 		getCams(coordinates);
 	});
@@ -115,9 +137,6 @@ function getCams(coordinates) {
 			favIcon.attr("data-title", data.webcams[i].title);
 
 
-
-
-
 			// Build card
 			cardBody.append(cardTitle);
 			cardBody.append(cardText);
@@ -136,26 +155,32 @@ function getCams(coordinates) {
 		$('.webcam-div').prepend(dataDiv);
 	});
 }
+
+$(document).on("click", ".fa-heart", function () {
+	$(this).attr("style", "color:aqua");
+})
+
+
+
 // Click function that makes Ajax call to retrieve flight information
 $(document).on("click", ".travel-btn", function () {
 	event.preventDefault();
+	let origin = "MAD";
+	let destination = "MUC";
+	let coord = "lat=" + latitude + "&lng=" + longitude;
+
+	let bookingQuery = "https://test.api.amadeus.com/v1/shopping/flight-dates?origin=" + origin + "&destination=" + destination;
 	$.ajax({
-		url: "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0",
-		method: "POST",
 		headers: {
-			"X-RapidAPI-Host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-			"X-RapidAPI-Key": rapidKey
+			"authorization": "Bearer " + authToken
 		},
-		data: {
-			"country": "US",
-			"currency": "USD",
-			"locale": "en-US",
-			"LHR-sky": "2019-09-1",
-			"adults": 1
-		},
+		url: bookingQuery,
+		method: "GET"
 	}).then(function (response) {
 		console.log(response);
+
 	})
+
 })
 
 // Logout Function
@@ -167,6 +192,7 @@ $(document).on("click", "#logout-btn", function () {
 		$("#fav-btn").hide();
 		$("#categories-btn").hide();
 		$("#pop-btn").hide();
+		$(".webcam-div").empty();
 	}, function (error) {
 		console.error('Sign Out Error', error);
 	});

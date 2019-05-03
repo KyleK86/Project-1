@@ -1,14 +1,28 @@
+
 // Initialize Firebase
-let config = {
-	apiKey: "AIzaSyA_VBvhCQwkbk792q9BVCv19uC-SAMm8-M",
-	authDomain: "kjw-project-1.firebaseapp.com",
-	databaseURL: "https://kjw-project-1.firebaseio.com",
-	projectId: "kjw-project-1",
-	storageBucket: "kjw-project-1.appspot.com",
-	messagingSenderId: "1048382006751"
+var config = {
+	apiKey: "AIzaSyBOyHz9lESYUIk5wGDidBsfohbE8TQq-y4",
+	authDomain: "travel-spy-treez-1556572026545.firebaseapp.com",
+	databaseURL: "https://travel-spy-treez-1556572026545.firebaseio.com",
+	projectId: "travel-spy-treez-1556572026545",
+	storageBucket: "travel-spy-treez-1556572026545.appspot.com",
+	messagingSenderId: "460774115127"
 };
 firebase.initializeApp(config);
-let database = firebase.database;
+var database = firebase.database();
+
+// References
+var dbUserObject = firebase.database().ref().child('users')
+var dbUserFav = dbUserObject.child('favorites')
+
+// Synchronize database object
+dbUserObject.on('value', snap => console.log(snap.val()));
+// Synchronize database user 'favorites' when item is added
+dbUserFav.on('child_added', snap => console.log(snap.val()));
+// Synchronize database user 'favorites' when item is changed
+// Synchronize database user 'favorites' when item is removed
+
+
 
 // Click function populates 9 webcams that are sorted by distance based on user input
 $(document).on('click', '#search-btn', function () {
@@ -23,7 +37,7 @@ $(document).on('click', '#search-btn', function () {
 	}).then(function (response) {
 		let geoData = response.results[0];
 		// Test / Debug
-		console.log(geoData);
+		// console.log(geoData);
 
 		let longitude = geoData.geometry.location.lng;
 		let latitude = geoData.geometry.location.lat;
@@ -32,12 +46,12 @@ $(document).on('click', '#search-btn', function () {
 	});
 });
 
-// Function to retrieve webcams based on the converted location (coordinates) produced by Geocoding
+// Variable to hold RapidAPI key
 let rapidKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
 
+// Function to retrieve webcams based on the converted location (coordinates) produced by Geocoding
 function getCams(coordinates) {
 	let show = 'image,player,location'
-
 	let queryURL = 'https://webcamstravel.p.rapidapi.com/webcams/list/property=day,hd/nearby=' + coordinates + '/orderby=distance/limit=9?show=categories;webcams:' + show;
 
 	$.ajax({
@@ -53,6 +67,8 @@ function getCams(coordinates) {
 		// Create div to display contents to HTML
 		let dataDiv = $("<div>").addClass("dataDiv");
 		// Test / Debug
+		console.log(data);
+		
 
 		// Iterate and parse through data
 		for (var i = 0; i < data.webcams.length; i++) {
@@ -63,9 +79,7 @@ function getCams(coordinates) {
 
 			// Dynamically create a Bootstrap image card to display each webcam preview
 			let card = $("<div>").addClass("card");
-
 			let imgLink = $("<a>").addClass("img-link").attr("href", data.webcams[i].player.year.embed).attr("target", "_blank");
-
 			let cardImg = $("<img>").addClass("webcam").addClass("card-img-top");
 			cardImg.attr("src", data.webcams[i].image.current.preview).attr("alt", data.webcams[i].title);
 			let cardBody = $("<div>").addClass("card-body");
@@ -82,17 +96,16 @@ function getCams(coordinates) {
 			imgLink.append(cardImg)
 			card.append(cardBody);
 			card.prepend(imgLink);
-			// Attach to div
+
+			// Attach card to div
 			dataDiv.append(card);
 		}
-
 		// Empty HTML div and display "dataDiv" containing cards
 		$('.webcam-div').empty();
-
 		$('.webcam-div').prepend(dataDiv);
 	});
 }
-
+// Click function that makes Ajax call to retrieve flight information
 $(document).on("click", ".travel-btn", function () {
 	event.preventDefault();
 	$.ajax({
@@ -112,16 +125,19 @@ $(document).on("click", ".travel-btn", function () {
 	}).then(function (response) {
 		console.log(response);
 	})
-
 })
 
+// Logout Function
+$(document).on("click", "#logout-btn", function () {
+	firebase.auth().signOut().then(function () {
+		console.log('Signed Out');
+	}, function (error) {
+		console.error('Sign Out Error', error);
+	});
+});
 
-//.done(function to render nearest webcam and list of nearby cams to html)
 
-// function to make ajax call to travel agency API
+// TODO:
 // .done(function to render travel options to html)
-
 //function on button-clicked "add to favorites" to add webcam to profile favorites list in firebase
 //function to grab the favorites list from firebase profile section
-
-//handle auth.

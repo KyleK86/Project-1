@@ -1,19 +1,16 @@
+
 // Callback function to track the Auth state
 initApp = function () {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             // User is signed in.
 
-            // Get user profile
+            // Get user profile data
             var name, email, uid, emailVerified;
             name = user.displayName;
-            email = user.email;
+            email = user.email
             emailVerified = user.emailVerified;
             uid = user.uid;
-            // console.log("Display Name: " + name);
-            // console.log("Email: " + email);
-            // console.log("Email Verified: " + emailVerified);
-            // console.log("User ID: " + uid);
 
             // Hide login button and display account & logout buttons
             $("#login-btn").hide();
@@ -31,8 +28,6 @@ initApp = function () {
                 $("<td>").text(name),
                 $("<td>").text(email),
                 $("<td>").text(emailVerified),
-
-
             );
             // Display the account info in modal by appending div
             $("#table-data > tbody").append(newRow);

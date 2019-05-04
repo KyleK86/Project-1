@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,34 +6,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
     <!-- BOOTSTRAP -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <!-- Styles -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- STYLES -->
     <style>
         body {
             background: rgb(133, 133, 133);
         }
-
         h1 {
             font-variant: small-caps;
             font-family: Arial, Helvetica, sans-serif;
         }
-
         #firebaseui-auth-container>div {
             background: black;
             padding: 1em;
             border-radius: 5px;
             box-shadow: 5px 5px 15px 5px #333;
         }
-
         #firebaseui-auth-container p {
             color: white;
         }
-
         .firebaseui-textfield.mdl-textfield .firebaseui-input {
             border-color: rgb(133, 133, 133, 0.5);
-            color: #ebebeb;
+            background: rgb(133, 133, 133);
+            color: black;
             padding: 0.15em;
         }
     </style>
@@ -59,12 +59,11 @@
             signInSuccessUrl: 'index.html',
             signInOptions: [
                 // This determines which providers a user can sign-in with.
-                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
                 firebase.auth.EmailAuthProvider.PROVIDER_ID,
-                firebase.auth.GithubAuthProvider.PROVIDER_ID,
+                // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                // firebase.auth.GithubAuthProvider.PROVIDER_ID,
             ],
             // tosUrl and privacyPolicyUrl accept either url string or a callback
-            // function.
             // Terms of service url/callback.
             tosUrl: '<your-tos-url>',
             // Privacy policy url/callback.
@@ -77,9 +76,9 @@
         // The start method will wait until the DOM is loaded.
         ui.start('#firebaseui-auth-container', uiConfig);
     </script>
-    <title>Travel Spy Login</title>
+    <title>Travel Spy | Login</title>
 </head>
-
+<!-- MAIN CONTENT -->
 <body>
     <div class="my-1 container">
         <div class="jumbotron">

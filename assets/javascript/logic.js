@@ -1,3 +1,4 @@
+
 // Initialize Firebase
 let authToken;
 $.ajax({
@@ -29,32 +30,26 @@ try {
 		console.error('Firebase initialization error', err.stack)
 	}
 }
-
 var database = firebase.database();
 
+// Function that determines the user and retrieves their "favorites" from Firebase to display in dropdown
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
 		var userFavRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid);
 		userFavRef.on('child_added', function(snapshot) {
 			for (var i in snapshot.val()) {
-				let favDiv = $("<div>")
-				let link = $("<a>").attr("href", data.webcams[i].player.year.embed);
-				link.addClass('dropdown-item')
-				link.text(snapshot.val()[i].camTitle);
+				// Test / Debug
+				// console.log(snapshot.val());
 
-				favDiv.append(link);
-				$(".dropdown-menu").append(favDiv);
+				let fav = $("<p>").text(snapshot.val()[i].camTitle);
+				let link = $("<a>").addClass('dropdown-item').attr("href", snapshot.val()[i].camURL).attr("target", "_blank")
+				// Apend favorite to link then the link to HTML reference
+				link.append(fav);
+				$(".fav-drop").append(link);
 			}
-			console.log(snapshot.val());
 		})
 	}
 })
-
-
-// // Synchronize database user 'favorites' when item is added
-// dbUserFav.on('child_added', function(snapshot) {
-// 	console.log(snapshot.val())
-// });
 
 // Click function to add favorites to database and dropdown menu
 $(document).on('click', '.fa-heart', function () {
@@ -69,9 +64,9 @@ $(document).on('click', '.fa-heart', function () {
 	user.child('favorites').push(camData);
 });
 
-
 let longitude;
 let latitude;
+
 // Click function populates 9 webcams that are sorted by distance based on user input
 $(document).on('click', '#search-btn', function () {
 	event.preventDefault();
@@ -114,8 +109,7 @@ function getCams(coordinates) {
 		// Create div to display contents to HTML
 		let dataDiv = $("<div>").addClass("dataDiv");
 		// Test / Debug
-		// console.log(data);
-
+		console.log(data.categories);
 
 		// Iterate and parse through data
 		for (var i = 0; i < data.webcams.length; i++) {
@@ -139,7 +133,6 @@ function getCams(coordinates) {
 			favIcon.attr("data-img", data.webcams[i].image.current.preview);
 			favIcon.attr("data-title", data.webcams[i].title);
 
-
 			// Build card
 			cardBody.append(cardTitle);
 			cardBody.append(cardText);
@@ -149,7 +142,6 @@ function getCams(coordinates) {
 			card.append(cardBody);
 			card.prepend(imgLink);
 
-
 			// Attach card to div
 			dataDiv.append(card);
 		}
@@ -158,12 +150,12 @@ function getCams(coordinates) {
 		$('.webcam-div').prepend(dataDiv);
 	});
 }
+getCams();
 
+// Click function to change the color of "favorite" hearts
 $(document).on("click", ".fa-heart", function () {
 	$(this).attr("style", "color:aqua");
 })
-
-
 
 // Click function that makes Ajax call to retrieve flight information
 $(document).on("click", ".travel-btn", function () {
@@ -171,7 +163,6 @@ $(document).on("click", ".travel-btn", function () {
 	let origin = "MAD";
 	let destination = "MUC";
 	let coord = "lat=" + latitude + "&lng=" + longitude;
-
 	let bookingQuery = "https://test.api.amadeus.com/v1/shopping/flight-dates?origin=" + origin + "&destination=" + destination;
 	$.ajax({
 		headers: {
@@ -181,9 +172,7 @@ $(document).on("click", ".travel-btn", function () {
 		method: "GET"
 	}).then(function (response) {
 		console.log(response);
-
 	})
-
 })
 
 // Logout Function
@@ -204,5 +193,3 @@ $(document).on("click", "#logout-btn", function () {
 
 // TODO:
 // .done(function to render travel options to html)
-//function on button-clicked "add to favorites" to add webcam to profile favorites list in firebase
-//function to grab the favorites list from firebase profile section

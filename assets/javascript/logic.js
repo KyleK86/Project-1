@@ -1,41 +1,87 @@
+//Get auth tokens once per page load
+let authToken;
+$.ajax({
+	url: "https://test.api.amadeus.com/v1/security/oauth2/token",
+	method: "POST",
+	headers: {
+		"Content-Type": "application/x-www-form-urlencoded"
+	},
+	data: {
+		grant_type: "client_credentials",
+		client_id: "ESRG39Ac1pHRKKLRaVVf8zUwscrCfWpz",
+		client_secret: "DKoZdVFyAqjzbWYq"
+	}
+
+}).then(function (response) {
+	authToken = response.access_token;
+});
+
+let lufthansaToken;
+$.ajax({
+	url: "https://api.lufthansa.com/v1/oauth/token",
+	method: "POST",
+	data: {
+		client_id: "hfx529s9n9y4usqmkueb7qug",
+		client_secret: "Z39Xqv5sCX",
+		grant_type: "client_credentials"
+	}
+}).then(function (response) {
+	console.log(response);
+	lufthansaToken = response.access_token;
+
+})
+
 // Initialize Firebase
 var config = {
 	apiKey: "AIzaSyBOyHz9lESYUIk5wGDidBsfohbE8TQq-y4",
-	authDomain: "travel-spy-treez-1556572026545.firebaseapp.com",
 	databaseURL: "https://travel-spy-treez-1556572026545.firebaseio.com",
 	projectId: "travel-spy-treez-1556572026545",
 	storageBucket: "travel-spy-treez-1556572026545.appspot.com",
 	messagingSenderId: "460774115127"
 };
-firebase.initializeApp(config);
+try {
+	firebase.initializeApp(config)
+} catch (err) {
+	if (!/already exists/.test(err.message)) {
+		console.error('Firebase initialization error', err.stack)
+	}
+}
 var database = firebase.database();
 
+// Function that determines the user and retrieves their "favorites" from Firebase to display in dropdown
+firebase.auth().onAuthStateChanged(function (user) {
+	if (user) {
+		var userFavRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid);
+		userFavRef.on('child_added', function (snapshot) {
+			for (var i in snapshot.val()) {
+				// Test / Debug
+				// console.log(snapshot.val());
 
-// References
-var dbUserObject = firebase.database().ref().child('users')
-var dbUserFav = dbUserObject.child('favorites')
+				let fav = $("<p>").text(snapshot.val()[i].camTitle);
+				let link = $("<a>").addClass('dropdown-item').attr("href", snapshot.val()[i].camURL).attr("target", "_blank")
+				// Apend favorite to link then the link to HTML reference
+				link.append(fav);
+				$(".fav-drop").append(link);
+			}
+		})
+	}
+})
 
-// Synchronize database object
-// dbUserObject.on('value', snap => console.log(snap.val()));
-// // Synchronize database user 'favorites' when item is added
-// dbUserFav.on('child_added', snap => console.log(snap.val()));
-// Synchronize database user 'favorites' when item is changed
-// Synchronize database user 'favorites' when item is removed
-
-//CLICK FUNCTION TO ADD FAVORITE TO DATABASE
+// Click function to add favorites to database and dropdown menu
 $(document).on('click', '.fa-heart', function () {
 	let camURL = $(this).attr('data-url');
+	let camTitle = $(this).attr('data-title');
+	let camData = {
+		camURL: camURL,
+		camTitle: camTitle
+	}
 	let userID = firebase.auth().currentUser.uid;
 	let user = firebase.database().ref("users/" + userID);
-	user.child('favorites').push(camURL);
+	user.child('favorites').push(camData);
+});
 
-	// for (var i = 0;i<dbUserFav.length;i++){
-
-	// }
-
-
-
-})
+let longitude;
+let latitude;
 
 // Click function populates 9 webcams that are sorted by distance based on user input
 $(document).on('click', '#search-btn', function () {
@@ -51,13 +97,42 @@ $(document).on('click', '#search-btn', function () {
 		let geoData = response.results[0];
 		// Test / Debug
 		// console.log(geoData);
-
-		let longitude = geoData.geometry.location.lng;
-		let latitude = geoData.geometry.location.lat;
+		longitude = geoData.geometry.location.lng;
+		latitude = geoData.geometry.location.lat;
 		let coordinates = latitude + "," + longitude + ",1000";
 		getCams(coordinates);
+		getAirports(latitude, longitude);
+	});
+	let dest = $('#origin-input').val().trim().replace(' ', "+");
+	let geocodeHost2 = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + dest + '&key=' + geocodeKey;
+	$.ajax({
+		url: geocodeHost2,
+		method: 'GET'
+	}).then(function (response) {
+		let geoData = response.results[0];
+		// Test / Debug
+		// console.log(geoData);
+		lng = geoData.geometry.location.lng;
+		lat = geoData.geometry.location.lat;
+		setOrigin(lat, lng);
 	});
 });
+
+function setOrigin(lat, lng) {
+	let qUrl = "https://api.lufthansa.com/v1/references/airports/nearest/" + lat + "," + lng;
+	let auth = "Bearer " + lufthansaToken;
+	$.ajax({
+		url: qUrl,
+		headers: {
+			Authorization: auth,
+			Accept: "application/json"
+		},
+		method: "GET"
+	}).then(function (response) {
+		origin = response.NearestAirportResource.Airports.Airport[0].CityCode;
+	})
+}
+
 
 // Variable to hold RapidAPI key
 let rapidKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
@@ -80,8 +155,7 @@ function getCams(coordinates) {
 		// Create div to display contents to HTML
 		let dataDiv = $("<div>").addClass("dataDiv");
 		// Test / Debug
-		// console.log(data);
-
+		console.log(data.categories);
 
 		// Iterate and parse through data
 		for (var i = 0; i < data.webcams.length; i++) {
@@ -103,9 +177,7 @@ function getCams(coordinates) {
 			let favIcon = $("<i>").addClass("px-2 fas fa-heart");
 			favIcon.attr("data-url", data.webcams[i].player.year.embed);
 			favIcon.attr("data-img", data.webcams[i].image.current.preview);
-
-
-
+			favIcon.attr("data-title", data.webcams[i].title);
 
 			// Build card
 			cardBody.append(cardTitle);
@@ -116,7 +188,6 @@ function getCams(coordinates) {
 			card.append(cardBody);
 			card.prepend(imgLink);
 
-
 			// Attach card to div
 			dataDiv.append(card);
 		}
@@ -125,26 +196,57 @@ function getCams(coordinates) {
 		$('.webcam-div').prepend(dataDiv);
 	});
 }
+
+let dest;
+
+function getAirports(latitude, longitude) {
+	let qUrl = "https://api.lufthansa.com/v1/references/airports/nearest/" + latitude + "," + longitude;
+	let auth = "Bearer " + lufthansaToken;
+	$.ajax({
+		url: qUrl,
+		headers: {
+			Authorization: auth,
+			Accept: "application/json"
+		},
+		method: "GET"
+	}).then(function (response) {
+		console.log(response);
+		dest = response.NearestAirportResource.Airports.Airport[0].CityCode;
+	})
+}
+
+// Click function to change the color of "favorite" hearts
+$(document).on("click", ".fa-heart", function () {
+	$(this).attr("style", "color:aqua");
+})
+
 // Click function that makes Ajax call to retrieve flight information
 $(document).on("click", ".travel-btn", function () {
 	event.preventDefault();
+	let bookingQuery = "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=" + origin + "&destination=" + dest + "&departureDate=2019-08-01";
+
 	$.ajax({
-		url: "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0",
-		method: "POST",
 		headers: {
-			"X-RapidAPI-Host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-			"X-RapidAPI-Key": rapidKey
+			Authorization: "Bearer " + authToken
 		},
-		data: {
-			"country": "US",
-			"currency": "USD",
-			"locale": "en-US",
-			"LHR-sky": "2019-09-1",
-			"adults": 1
-		},
+		url: bookingQuery,
+		method: "GET"
 	}).then(function (response) {
 		console.log(response);
+		console.log(response.data[3].offerItems);
+		for (var i in response.data) {
+			var newRow = $("<tr>").append(
+				$("<td>").text(response.data[i].offerItems[0].price.total),
+				$("<td>").text(response.data[i].offerItems[0].services[0].segments[0].flightSegment.carrierCode),
+				$("<td>").text(response.data[i].offerItems[0].services[0].segments[0].pricingDetailPerAdult.availability),
+			);
+			// Display the travel info in modal by appending div
+			$("#travel-table-data > tbody").append(newRow);
+		}
+		$('#modal-travel').modal('show');
+
 	})
+
 })
 
 // Logout Function
@@ -156,6 +258,7 @@ $(document).on("click", "#logout-btn", function () {
 		$("#fav-btn").hide();
 		$("#categories-btn").hide();
 		$("#pop-btn").hide();
+		$(".webcam-div").empty();
 	}, function (error) {
 		console.error('Sign Out Error', error);
 	});
@@ -164,5 +267,3 @@ $(document).on("click", "#logout-btn", function () {
 
 // TODO:
 // .done(function to render travel options to html)
-//function on button-clicked "add to favorites" to add webcam to profile favorites list in firebase
-//function to grab the favorites list from firebase profile section

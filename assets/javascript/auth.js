@@ -4,25 +4,12 @@ initApp = function () {
         if (user) {
             // User is signed in.
 
-            // Get user profile
+            // Get user profile data
             var name, email, uid, emailVerified;
             name = user.displayName;
-            email = user.email;
+            email = user.email
             emailVerified = user.emailVerified;
             uid = user.uid;
-
-            var userItem = {
-                'name': name,
-                'email': email,
-                'emailVerified': emailVerified,
-                'favorites': ["nothing"]
-            };
-            firebase.database().ref("/users/" + uid).set(userItem);
-
-            console.log("Display Name: " + name);
-            console.log("Email: " + email);
-            console.log("Email Verified: " + emailVerified);
-            console.log("User ID: " + uid);
 
             // Hide login button and display account & logout buttons
             $("#login-btn").hide();
@@ -36,15 +23,17 @@ initApp = function () {
             $("#display-name").html("Username: " + name);
 
             // Build a div filled with account information
-            var div = $("<div>").append(
-                $("<p>").html("Username: " + name),
-                $("<p>").html("Email: " + email)
+            var newRow = $("<tr>").append(
+                $("<td>").text(name),
+                $("<td>").text(email),
+                $("<td>").text(emailVerified),
             );
             // Display the account info in modal by appending div
-            $("#account-info").append(div);
+            $("#table-data > tbody").append(newRow);
         } else {
             // User is signed out
             console.log('Signed Out');
+            $("#webcam-div").empty();
         }
     }, function (error) {
         console.log(error);

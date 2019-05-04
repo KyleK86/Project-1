@@ -27,14 +27,13 @@
     <!-- Navbar
     ========================================================================================================= -->
     <nav class="navbar-wrap navbar navbar-expand-lg navbar-light">
-        <img class="mr-2" id="brand" src="assets/images/logo_transparent1.png" alt="Travel Spy Logo" style="width:100px; height:100px">
-        <button class="nav-link" id="pop-btn" style="display:none">Popular</button>
+
+        <img class="mr-2" id="brand" src="assets/images/logo_transparent1.png" alt="Travel Spy Logo"
+            style="width:100px; height:100px">
         <div class="button-group">
-            <button class="nav-link" id="categories-btn" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:none">Categories</button>
-            <div class="cat-drop dropdown-menu" aria-labelledby="categories-btn"></div>
-        </div>
-        <div class="button-group">
-            <button class="nav-link" id="fav-btn" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:none">Favorites</button>
+            <button class="nav-link" id="fav-btn" role="button" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false" style="display:none">Favorites</button>
+
             <div class="fav-drop dropdown-menu" aria-labelledby="fav-btn"></div>
         </div>
         <button class="nav-link" id="login-btn" onclick="window.location.href='login.html'">Login</button>
@@ -45,6 +44,10 @@
         <form class="search-form" action="">
             <div class="text-center text-light" id="slogan">Visualize your next adventure!</div>
             <input class="text-center" id="search-bar" type="text" placeholder="Enter Dream Destination" name="search">
+
+            <input class="text-center" id="origin-input" type="text" placeholder="Enter Current Location" name="origin">
+
+
             <button class="py-0 mb-2 btn" id="search-btn" type="submit">Spy</button>
         </form>
     </div>
@@ -75,6 +78,43 @@
                             </tbody>
                         </table>
                     </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="m-auto btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Travel Modal
+    ========================================================================================================= -->
+    <div class="modal fade" id="modal-travel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cheapest Flights:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="travel-info">
+                        <table class="table table-sm table-hover" id='travel-table-data'>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Airline</th>
+                                    <th scope="col">Availabilty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="m-auto btn btn-secondary" data-dismiss="modal">Close</button>

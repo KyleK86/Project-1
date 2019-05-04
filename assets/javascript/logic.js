@@ -1,4 +1,38 @@
 
+//Get auth tokens once per page load
+let authToken;
+$.ajax({
+	url: "https://test.api.amadeus.com/v1/security/oauth2/token",
+	method: "POST",
+	headers: {
+		"Content-Type": "application/x-www-form-urlencoded"
+	},
+	data: {
+		grant_type: "client_credentials",
+		client_id: "ESRG39Ac1pHRKKLRaVVf8zUwscrCfWpz",
+		client_secret: "DKoZdVFyAqjzbWYq"
+	}
+
+}).then(function (response) {
+	authToken = response.access_token;
+});
+
+let lufthansaToken;
+$.ajax({
+	url: "https://api.lufthansa.com/v1/oauth/token",
+	method: "POST",
+	data: {
+		client_id: "hfx529s9n9y4usqmkueb7qug",
+		client_secret: "Z39Xqv5sCX",
+		grant_type: "client_credentials"
+	}
+}).then(function (response) {
+	console.log(response);
+	lufthansaToken = response.access_token;
+
+})
+
+
 // Initialize Firebase
 let authToken;
 $.ajax({
@@ -33,10 +67,11 @@ try {
 var database = firebase.database();
 
 // Function that determines the user and retrieves their "favorites" from Firebase to display in dropdown
-firebase.auth().onAuthStateChanged(function(user) {
+
+firebase.auth().onAuthStateChanged(function (user) {
 	if (user) {
 		var userFavRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid);
-		userFavRef.on('child_added', function(snapshot) {
+		userFavRef.on('child_added', function (snapshot) {
 			for (var i in snapshot.val()) {
 				// Test / Debug
 				// console.log(snapshot.val());
@@ -56,8 +91,10 @@ $(document).on('click', '.fa-heart', function () {
 	let camURL = $(this).attr('data-url');
 	let camTitle = $(this).attr('data-title');
 	let camData = {
-		camURL : camURL,
-		camTitle : camTitle
+
+		camURL: camURL,
+		camTitle: camTitle
+
 	}
 	let userID = firebase.auth().currentUser.uid;
 	let user = firebase.database().ref("users/" + userID);
@@ -85,8 +122,38 @@ $(document).on('click', '#search-btn', function () {
 		latitude = geoData.geometry.location.lat;
 		let coordinates = latitude + "," + longitude + ",1000";
 		getCams(coordinates);
+		getAirports(latitude, longitude);
+	});
+	let dest = $('#origin-input').val().trim().replace(' ', "+");
+	let geocodeHost2 = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + dest + '&key=' + geocodeKey;
+	$.ajax({
+		url: geocodeHost2,
+		method: 'GET'
+	}).then(function (response) {
+		let geoData = response.results[0];
+		// Test / Debug
+		// console.log(geoData);
+		lng = geoData.geometry.location.lng;
+		lat = geoData.geometry.location.lat;
+		setOrigin(lat, lng);
 	});
 });
+
+function setOrigin(lat, lng) {
+	let qUrl = "https://api.lufthansa.com/v1/references/airports/nearest/" + lat + "," + lng;
+	let auth = "Bearer " + lufthansaToken;
+	$.ajax({
+		url: qUrl,
+		headers: {
+			Authorization: auth,
+			Accept: "application/json"
+		},
+		method: "GET"
+	}).then(function (response) {
+		origin = response.NearestAirportResource.Airports.Airport[0].CityCode;
+	})
+}
+
 
 // Variable to hold RapidAPI key
 let rapidKey = '0eacac436dmsh7800f72af242e86p18514cjsnf1fb610b79fb';
@@ -150,7 +217,26 @@ function getCams(coordinates) {
 		$('.webcam-div').prepend(dataDiv);
 	});
 }
-getCams();
+
+
+let dest;
+
+function getAirports(latitude, longitude) {
+	let qUrl = "https://api.lufthansa.com/v1/references/airports/nearest/" + latitude + "," + longitude;
+	let auth = "Bearer " + lufthansaToken;
+	$.ajax({
+		url: qUrl,
+		headers: {
+			Authorization: auth,
+			Accept: "application/json"
+		},
+		method: "GET"
+	}).then(function (response) {
+		console.log(response);
+		dest = response.NearestAirportResource.Airports.Airport[0].CityCode;
+	})
+}
+
 
 // Click function to change the color of "favorite" hearts
 $(document).on("click", ".fa-heart", function () {
@@ -160,19 +246,32 @@ $(document).on("click", ".fa-heart", function () {
 // Click function that makes Ajax call to retrieve flight information
 $(document).on("click", ".travel-btn", function () {
 	event.preventDefault();
-	let origin = "MAD";
-	let destination = "MUC";
-	let coord = "lat=" + latitude + "&lng=" + longitude;
-	let bookingQuery = "https://test.api.amadeus.com/v1/shopping/flight-dates?origin=" + origin + "&destination=" + destination;
+
+	let bookingQuery = "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=" + origin + "&destination=" + dest + "&departureDate=2019-08-01";
+
 	$.ajax({
 		headers: {
-			"authorization": "Bearer " + authToken
+			Authorization: "Bearer " + authToken
+
 		},
 		url: bookingQuery,
 		method: "GET"
 	}).then(function (response) {
 		console.log(response);
+		console.log(response.data[3].offerItems);
+		for (var i in response.data) {
+			var newRow = $("<tr>").append(
+				$("<td>").text(response.data[i].offerItems[0].price.total),
+				$("<td>").text(response.data[i].offerItems[0].services[0].segments[0].flightSegment.carrierCode),
+				$("<td>").text(response.data[i].offerItems[0].services[0].segments[0].pricingDetailPerAdult.availability),
+			);
+			// Display the travel info in modal by appending div
+			$("#travel-table-data > tbody").append(newRow);
+		}
+		$('#modal-travel').modal('show');
+
 	})
+
 })
 
 // Logout Function
@@ -191,5 +290,3 @@ $(document).on("click", "#logout-btn", function () {
 });
 
 
-// TODO:
-// .done(function to render travel options to html)

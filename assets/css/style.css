@@ -66,8 +66,12 @@ button {
 
 .dropdown-item p {
     margin-bottom: 0.5em;
+
 }
 
+.dropdown-item p {
+    margin-bottom: 0.5em;
+}
 /* Search Bar
 ================================================================= */
 #slogan {
@@ -142,9 +146,11 @@ button {
         max-width: 100%;
     }
 
+
     .dataDiv {
         font-size: 85%
     }
+
 
     .travel-btn,
     .nav-link {
@@ -157,16 +163,20 @@ button {
         max-width: 100%;
     }
 
+
     .dataDiv {
         font-size: 70%
     }
+
 
     .travel-btn,
     .nav-link {
         font-size: 70%;
     }
 
+
     .navbar-wrap {
         padding: 0.25em 0.5em;
     }
 }
+

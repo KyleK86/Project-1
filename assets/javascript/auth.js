@@ -1,3 +1,4 @@
+
 // Callback function to track the Auth state
 initApp = function () {
     firebase.auth().onAuthStateChanged(function (user) {

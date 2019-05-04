@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,11 +14,9 @@
     <!-- RESET -->
     <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
     <!-- BOOTSTRAP -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!--FONTAWESOME-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <!-- PERSONAL STYLES -->
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
@@ -28,23 +27,26 @@
     <!-- Navbar
     ========================================================================================================= -->
     <nav class="navbar-wrap navbar navbar-expand-lg navbar-light">
+
         <img class="mr-2" id="brand" src="assets/images/logo_transparent1.png" alt="Travel Spy Logo"
             style="width:100px; height:100px">
         <div class="button-group">
             <button class="nav-link" id="fav-btn" role="button" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false" style="display:none">Favorites</button>
+
             <div class="fav-drop dropdown-menu" aria-labelledby="fav-btn"></div>
         </div>
         <button class="nav-link" id="login-btn" onclick="window.location.href='login.html'">Login</button>
-        <button class="nav-link" id="account-btn" data-toggle="modal" data-target="#modal-account"
-            style="display:none">Account</button>
+        <button class="nav-link" id="account-btn" data-toggle="modal" data-target="#modal-account" style="display:none">Account</button>
         <button class="nav-link" id="logout-btn" style="display:none">Logout</button>
     </nav>
     <div class="container">
         <form class="search-form" action="">
             <div class="text-center text-light" id="slogan">Visualize your next adventure!</div>
             <input class="text-center" id="search-bar" type="text" placeholder="Enter Dream Destination" name="search">
+
             <input class="text-center" id="origin-input" type="text" placeholder="Enter Current Location" name="origin">
+
 
             <button class="py-0 mb-2 btn" id="search-btn" type="submit">Spy</button>
         </form>
@@ -76,6 +78,7 @@
                             </tbody>
                         </table>
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="m-auto btn btn-secondary" data-dismiss="modal">Close</button>
@@ -111,6 +114,7 @@
                             </tbody>
                         </table>
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="m-auto btn btn-secondary" data-dismiss="modal">Close</button>
@@ -131,12 +135,8 @@
     <script async type="text/javascript" src="https://api.lookr.com/embed/script/player.js"></script>
     <!-- BOOTSTRAP JQUERY & JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!-- FIREBASE -->
     <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
     <!-- PERSONAL JS -->

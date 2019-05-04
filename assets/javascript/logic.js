@@ -1,4 +1,3 @@
-
 //Get auth tokens once per page load
 let authToken;
 $.ajax({
@@ -32,24 +31,6 @@ $.ajax({
 
 })
 
-
-// Initialize Firebase
-let authToken;
-$.ajax({
-	url: "https://test.api.amadeus.com/v1/security/oauth2/token",
-	method: "POST",
-	headers: {
-		"Content-Type": "application/x-www-form-urlencoded"
-	},
-	data: {
-		grant_type: "client_credentials",
-		client_id: "ESRG39Ac1pHRKKLRaVVf8zUwscrCfWpz",
-		client_secret: "DKoZdVFyAqjzbWYq"
-	}
-
-}).then(function (response) {
-	authToken = response.access_token;
-})
 var config = {
 	apiKey: "AIzaSyBOyHz9lESYUIk5wGDidBsfohbE8TQq-y4",
 	databaseURL: "https://travel-spy-treez-1556572026545.firebaseio.com",
@@ -193,8 +174,8 @@ function getCams(coordinates) {
 			let cardBody = $("<div>").addClass("card-body");
 			let cardTitle = $("<p>").addClass("card-title").text(location);
 			let cardText = $("<p>").addClass("card-text");
-			// let button = $("<a>").addClass("travel-btn btn btn-dark py-1");
-			// button.text("Take me here!");
+			let button = $("<a>").addClass("travel-btn btn btn-dark py-1");
+			button.text("Take me here!");
 			let favIcon = $("<i>").addClass("px-2 fas fa-heart");
 			favIcon.attr("data-url", data.webcams[i].player.year.embed);
 			favIcon.attr("data-img", data.webcams[i].image.current.preview);
@@ -203,7 +184,7 @@ function getCams(coordinates) {
 			// Build card
 			cardBody.append(cardTitle);
 			cardBody.append(cardText);
-			// cardBody.append(button);
+			cardBody.append(button);
 			cardBody.append(favIcon);
 			imgLink.append(cardImg)
 			card.append(cardBody);
@@ -288,5 +269,3 @@ $(document).on("click", "#logout-btn", function () {
 		console.error('Sign Out Error', error);
 	});
 });
-
-

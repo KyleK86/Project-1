@@ -126,8 +126,8 @@ function getCams(coordinates) {
 			let cardBody = $("<div>").addClass("card-body");
 			let cardTitle = $("<p>").addClass("card-title").text(location);
 			let cardText = $("<p>").addClass("card-text");
-			let button = $("<a>").addClass("travel-btn btn btn-dark py-1");
-			button.text("Take me here!");
+			// let button = $("<a>").addClass("travel-btn btn btn-dark py-1");
+			// button.text("Take me here!");
 			let favIcon = $("<i>").addClass("px-2 fas fa-heart");
 			favIcon.attr("data-url", data.webcams[i].player.year.embed);
 			favIcon.attr("data-img", data.webcams[i].image.current.preview);
@@ -136,7 +136,7 @@ function getCams(coordinates) {
 			// Build card
 			cardBody.append(cardTitle);
 			cardBody.append(cardText);
-			cardBody.append(button);
+			// cardBody.append(button);
 			cardBody.append(favIcon);
 			imgLink.append(cardImg)
 			card.append(cardBody);
